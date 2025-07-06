@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konversi Panjang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Konversi Satuan Panjang</h1> 
+    <div class="formKonversi"> 
+      <form id="konversiForm">
+        <select name="satuanAsal" id="satuanAsal">
+          <option value="cm">Centimeter (cm)</option>
+          <option value="m">Meter (m)</option>
+          <option value="km">Kilometer (km)</option>
+          <option value="mm">Milimeter (mm)</option>
+          <option value="in">Inch (in)</option>
+          <option value="ft">Foot (ft)</option>
+        </select>
+
+        <input type="number" name="nilai" id="nilai" placeholder="1" required>
+        
+        <select name="satuanTujuan" id="satuanTujuan">
+          <option value="m">Meter (m)</option>
+          <option value="cm">Centimeter (cm)</option>
+          <option value="km">Kilometer (km)</option>
+          <option value="mm">Milimeter (mm)</option>
+          <option value="in">Inch (in)</option>
+          <option value="ft">Foot (ft)</option>
+        </select>
+         
+        <button type="button" onclick="kirimKePHP()">Konversi</button>
+      </form> 
+      <div id="outputHasil" class="hasil"></div>
+    </div>  
+
+    <script>
+      function kirimKePHP() {
+        const nilai  = document.getElementById("nilai").value.trim();
+        const asal   = document.getElementById("satuanAsal").value;
+        const tujuan = document.getElementById("satuanTujuan").value;
+
+        const body = new URLSearchParams({ nilai, asal, tujuan });
+
+        fetch("konversiPanjang.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: body.toString()
+        })
+        .then(r => r.text())
+        .then(text => {
+            document.getElementById("outputHasil").innerText = `Hasil: ${text}`;
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("outputHasil").innerText = "Terjadi kesalahan.";
+        });
+      }
+    </script>
+</body>
+</html>
